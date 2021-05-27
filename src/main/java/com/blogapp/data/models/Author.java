@@ -1,8 +1,10 @@
 package com.blogapp.data.models;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,7 +27,15 @@ public class Author {
     private String phoneNumber;
 
     @OneToMany
+    @ToString.Exclude
     private List<Post> posts;
+
+    public void addPost(Post post){
+        if(posts == null){
+            posts = new ArrayList<>();
+        }
+        posts.add(post);
+    }
 
 
 }
