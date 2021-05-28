@@ -1,6 +1,7 @@
 package com.blogapp.data.repository;
 
 import com.blogapp.data.models.Author;
+import com.blogapp.data.models.Comment;
 import com.blogapp.data.models.Post;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -67,6 +70,8 @@ class PostRepositoryTest {
         assertThrows(DataIntegrityViolationException.class, ()-> postRepository.save(post2));
     }
     @Test
+    @Transactional
+    @Rollback(value = false)
     void whenPostIsSaved_AuthorIsSaved(){
         Post post = new Post();
         Author author = new Author();
@@ -93,6 +98,88 @@ class PostRepositoryTest {
         List<Post> existingPosts = postRepository.findAll();
         assertThat(existingPosts).isNotNull();
         assertThat(existingPosts).hasSize(5);
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    void testThatPostCanBeDeletedById(){
+
+        Post savedPost = postRepository.findById(42).orElse(null);
+        assertThat(savedPost).isNotNull();
+        log.info("Post fetched from the database --> {}", savedPost);
+        //delete post
+        postRepository.deleteById(savedPost.getPostId());
+
+        Post deletedPost =postRepository.findById(savedPost.getPostId()).orElse(null);
+        assertThat(deletedPost).isNull();
+    }
+
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    void updateSavedPostTest(){
+        Post posUpdate = postRepository.findById(43).orElse(null);
+        assertThat(posUpdate.getContent()).isEqualTo("Post Content 3");
+
+        posUpdate.setContent("Hello, World!");
+
+        postRepository.save(posUpdate);
+
+        assertThat(posUpdate.getContent()).isEqualTo("Hello, World!");
+
+        postRepository.save(posUpdate);
+        assertThat(posUpdate.getContent()).isEqualTo("Hello, World!");
+    }
+
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    void updatePostAuthorTest(){
+        Post savedPost = postRepository.findById(41).orElse(null);
+        assertThat(savedPost).isNotNull();
+        log.info("Post fetched from the database --> {}", savedPost);
+
+        Author author = new Author();
+        author.setLastName("Brown");
+        author.setFirstName("Blue");
+        author.setPhoneNumber("09948");
+        author.setEmail("Brown@mail.com");
+        author.setProfession("Musician");
+
+        savedPost.setAuthor(author);
+        postRepository.save(savedPost);
+
+        Post updatedPost = postRepository.findById(savedPost.getPostId()).orElse(null);
+        assertThat(updatedPost).isNotNull();
+        assertThat(updatedPost.getAuthor()).isNotNull();
+        assertThat(updatedPost.getAuthor().getLastName()).isEqualTo("Brown");
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    void canAddCommentToExistingPost(){
+        Post postToComment = postRepository.findById(41).orElse(null);
+        assertThat(postToComment).isNotNull();
+        assertThat(postToComment.getComments()).hasSize(0);
+
+        Comment comment = new Comment("Peter bread","Insightful Post");
+        Comment comment2 = new Comment("Nonso Pride","Nice Post");
+        //map Post and comments
+        postToComment.addComment(comment, comment2);
+
+//        postToComment.setComments(postToComment.addComment(comment));
+
+        postRepository.save(postToComment);
+
+        Post commentPost = postRepository.findById(postToComment.getPostId()).orElse(null);
+
+        assertThat(commentPost).isNotNull();
+        assertThat(commentPost.getComments()).hasSize(2);
+
     }
 
 }
