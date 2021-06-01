@@ -91,6 +91,11 @@ class PostRepositoryTest {
 
         postRepository.save(post);
         log.info("Blog Post after saving --> {}", post);
+
+        Post savedPost = postRepository.findByTitle("My post title");
+        assertThat(savedPost).isNotNull();
+        assertThat(savedPost.getAuthor()).isNotNull();
+        assertThat(savedPost.getTitle()).isEqualTo("My post title");
     }
 
     @Test
@@ -171,7 +176,6 @@ class PostRepositoryTest {
         //map Post and comments
         postToComment.addComment(comment, comment2);
 
-//        postToComment.setComments(postToComment.addComment(comment));
 
         postRepository.save(postToComment);
 

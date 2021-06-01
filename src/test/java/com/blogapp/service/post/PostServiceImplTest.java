@@ -30,6 +30,6 @@ class PostServiceImplTest {
         when(postServiceImpl.savePost(new PostDTO())).thenReturn(testPost);
         postServiceImpl.savePost(new PostDTO());
 
-        verify(postRepository.save(testPost), times(1));
+        verify(postRepository, times(1)).save(testPost);
     }
 }
