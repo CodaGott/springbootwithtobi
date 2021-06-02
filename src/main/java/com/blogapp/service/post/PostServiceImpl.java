@@ -35,7 +35,7 @@ public class PostServiceImpl implements PostService{
         Post post = new Post();
 
 
-        if(postDTO.getImageFile() != null){
+        if(postDTO.getImageFile() != null && !postDTO.getImageFile().isEmpty()){
 //            Map<Object, Object> params = new HashMap<>();
 //            params.put("public_id", "blogapp/" + postDTO.getImageFile().getName());
 //            params.put("overwrite", true);
@@ -73,7 +73,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<Post> findAllPosts() {
-        return null;
+        return postRepository.findAll();
     }
 
     @Override

@@ -9,6 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.Mockito.*;
 
 class PostServiceImplTest {
@@ -30,7 +34,13 @@ class PostServiceImplTest {
     void whenTheSaveMethodIsCalled_thenRepositoryIsCalledOnceTest() throws PostObjectIsNullException {
         when(postServiceImpl.savePost(new PostDTO())).thenReturn(testPost);
         postServiceImpl.savePost(new PostDTO());
-
         verify(postRepository, times(1)).save(testPost);
+    }
+    @Test
+    void whenTheFindAllMethodIsCalled_thenReturnListOfPosts(){
+        List<Post> postList = new ArrayList<>();
+        when(postServiceImpl.findAllPosts()).thenReturn(postList);
+        postServiceImpl.findAllPosts();
+        verify(postRepository, times(1)).findAll();
     }
 }
