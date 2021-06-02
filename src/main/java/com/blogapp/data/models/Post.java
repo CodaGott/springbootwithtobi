@@ -31,7 +31,7 @@ public class Post {
     private Author author;
 
     @CreationTimestamp
-    private LocalDate dataCreated;
+    private LocalDate dateCreated;
 
     @UpdateTimestamp
     private LocalDate dateModified;

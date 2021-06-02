@@ -9,6 +9,7 @@ import com.blogapp.web.exceptions.PostObjectIsNullException;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -68,7 +69,13 @@ public class PostServiceImpl implements PostService{
 //        post.setTitle(postDTO.getTitle());
 //        post.setCoverImageUrl(postDTO.getImageFile());
 
-        return postRepository.save(post);
+        try{
+            return postRepository.save(post);
+        }catch (DataIntegrityViolationException ex){
+            log.info("Exception occurred -->{}", ex.getMessage());
+            throw ex;
+        }
+
     }
 
     @Override
