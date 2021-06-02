@@ -3,7 +3,9 @@ package com.blogapp.service.post;
 import com.blogapp.data.models.Comment;
 import com.blogapp.data.models.Post;
 import com.blogapp.data.repository.PostRepository;
+import com.blogapp.service.cloud.CloudStorageService;
 import com.blogapp.web.dto.PostDTO;
+import com.blogapp.web.exceptions.PostObjectIsNullException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,16 @@ public class PostServiceImpl implements PostService{
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    CloudStorageService cloudStorageService;
+
     @Override
-    public Post savePost(PostDTO postDTO) {
+    public Post savePost(PostDTO postDTO) throws PostObjectIsNullException {
+
+        if (postDTO == null){
+            throw  new PostObjectIsNullException();
+        }
+
         Post post = new Post();
 
         ModelMapper modelMapper = new ModelMapper();
