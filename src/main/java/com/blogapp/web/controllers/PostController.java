@@ -2,6 +2,7 @@ package com.blogapp.web.controllers;
 
 import com.blogapp.service.post.PostService;
 import com.blogapp.web.dto.PostDTO;
+import com.blogapp.web.exceptions.PostObjectIsNullException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,12 @@ public class PostController {
     @PostMapping("/save")
     public String savePost(@ModelAttribute @Valid PostDTO postDTO){
         log.info("Post dto received --> {}", postDTO);
-        return "index";
+
+        try{
+            postServiceImpl.savePost(postDTO);
+        }catch (PostObjectIsNullException pe){
+            log.info("Exception occured --> {}", pe.getMessage());
+        }
+        return "redirect:/posts";
     }
 }
