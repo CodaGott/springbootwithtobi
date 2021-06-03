@@ -4,15 +4,15 @@ package com.blogapp.web.dto;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Data
 public class PostDTO {
 
-    @NotNull(message = "Title can't be empty")
+    @NotBlank(message = "Title can't be empty")
     private String title;
 
-    @NotNull(message = "Content can't be empty")
+    @NotBlank(message = "Content can't be empty")
     private String content;
 
     private MultipartFile imageFile;
