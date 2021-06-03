@@ -18,4 +18,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
 
     List<Post> findByOrderByDateCreatedDesc();
+
+//    List<Post> findPostInDescOrder();
 }

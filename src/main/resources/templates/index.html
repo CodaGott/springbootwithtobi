@@ -62,9 +62,9 @@
             <div class="post-content">
                 <p th:text="${post.content}"></p>
             </div>
-            <a href="/asset/pages/post.html">
+            <a th:href="@{/posts/info/{postId}(postId = ${post.getPostId()})}">
                 <button class="view-post">
-                    continue reading
+                     continue reading
                 </button>
             </a>
         </div>
