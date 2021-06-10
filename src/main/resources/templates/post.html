@@ -17,7 +17,7 @@
 
 </head>
 
-<body>
+<body th:object="${postDetails}">
     
 
 
@@ -45,7 +45,8 @@
 
     <!-- Post Container -->
     <div class="post-header">
-        <h1>We Help You Create Perfect Modern Design</h1>
+        <img th:src="*{coverImageUrl}">
+        <h1 th:text="*{title}"></h1>
     </div>
     <!-- Post Container end -->
 
@@ -60,7 +61,7 @@
                     <a href="" class="user-name">Jen Lopez</a>
                 </a>
 
-                <p class="date-published"> July 22, 2017</p>
+                <p class="date-published" th:text="*{dateCreated}"></p>
 
                 <a href="" class="actions">
                     <p><i class="far fa-comment"></i></p>
@@ -68,20 +69,7 @@
                 </a>
             </div>
             <div class="post-content">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur.</p>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur.</p>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur.</p>
+                <p th:text="*{content}"></p>
             </div>
 
            <a th:href="@{/posts/}">Continue Reading</a>

@@ -3,6 +3,7 @@ package com.blogapp.web.controllers;
 import com.blogapp.data.models.Post;
 import com.blogapp.service.post.PostService;
 import com.blogapp.web.dto.PostDTO;
+import com.blogapp.web.exceptions.PostDoesNotExistException;
 import com.blogapp.web.exceptions.PostObjectIsNullException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,12 @@ public class PostController {
     @GetMapping("/info/{postId}")
     public String getAPost(@PathVariable Integer postId, Model model){
         log.info("Request for a post path --> {}", postId);
-        Post postDetails = postServiceImpl.findPostById(postId);
-        model.addAttribute("postDetails", new Post());
+        try{
+            Post postDetails = postServiceImpl.findPostById(postId);
+            model.addAttribute("postDetails", new Post());
+        } catch (PostDoesNotExistException px){
+            log.info("Exception occurred");
+        }
         return "post";
     }
 
